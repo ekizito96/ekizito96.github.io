@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Muyukani Kizito — AI Engineer · Founder · Language Designer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,700;0,900;1,400;1,700&family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=Lora:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --white: #ffffff;
+    --off: #fafaf8;
+    --paper: #f5f4f0;
+    --ink: #0e0e0e;
+    --ink-mid: #2d2d2d;
+    --ink-dim: #6b6b6b;
+    --ink-faint: #b0b0a8;
+    --rule: #d8d7d2;
+    --accent: #c8401a;
+    --accent-soft: #f9ede9;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--white);
+    color: var(--ink);
+    font-family: 'Lora', Georgia, serif;
+    font-size: 17px;
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .mono {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed;
+    inset: 0 0 auto 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 3.5rem;
+    height: 58px;
+    border-bottom: 1px solid var(--rule);
+    background: rgba(255,255,255,0.95);
+    backdrop-filter: blur(14px);
+  }
+  .nav-logo {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink);
+  }
+  .nav-logo .slash { color: var(--accent); margin: 0 0.3em; }
+  .nav-links { list-style: none; display: flex; gap: 2.5rem; }
+  .nav-links a {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-dim);
+    text-decoration: none;
+    transition: color 0.18s;
+  }
+  .nav-links a:hover { color: var(--ink); }
+
+  /* HERO */
+  #hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 0 3.5rem 5rem;
+    border-bottom: 1px solid var(--rule);
+    position: relative;
+    overflow: hidden;
+  }
+  #hero::before {
+    content: 'MK';
+    position: absolute;
+    right: -0.05em;
+    bottom: -0.15em;
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(18rem, 30vw, 38rem);
+    font-weight: 900;
+    color: var(--paper);
+    line-height: 1;
+    pointer-events: none;
+    user-select: none;
+    letter-spacing: -0.05em;
+  }
+  .hero-issue {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 2.5rem;
+    opacity: 0;
+    animation: rise 0.7s 0.1s ease forwards;
+  }
+  .hero-name {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(4rem, 9vw, 9rem);
+    font-weight: 900;
+    line-height: 0.9;
+    color: var(--ink);
+    letter-spacing: -0.03em;
+    position: relative;
+    z-index: 1;
+    opacity: 0;
+    animation: rise 0.8s 0.25s ease forwards;
+  }
+  .hero-name .given { display: block; }
+  .hero-name .family { display: block; color: var(--accent); font-style: italic; }
+  .hero-row {
+    margin-top: 2.5rem;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 2rem;
+    position: relative;
+    z-index: 1;
+    opacity: 0;
+    animation: rise 0.8s 0.5s ease forwards;
+  }
+  .hero-desc {
+    max-width: 480px;
+    font-family: 'Lora', serif;
+    font-size: 1rem;
+    color: var(--ink-dim);
+    line-height: 1.8;
+    font-style: italic;
+  }
+  .hero-roles { text-align: right; flex-shrink: 0; }
+  .hero-roles div {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    line-height: 2.2;
+  }
+  .hero-roles div span { color: var(--ink-mid); font-weight: 500; }
+
+  /* ABOUT */
+  #about {
+    padding: 6rem 3.5rem;
+    border-bottom: 1px solid var(--rule);
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 5rem;
+    align-items: start;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  .section-heading {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.2rem, 4vw, 3.8rem);
+    font-weight: 700;
+    color: var(--ink);
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+  }
+  .section-heading em { font-style: italic; color: var(--accent); }
+  .about-body { font-size: 1rem; color: var(--ink-mid); line-height: 1.9; }
+  .about-body p + p { margin-top: 1.4rem; }
+  .about-body strong { color: var(--ink); font-weight: 600; }
+
+  .stat-strip {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    border-top: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+    margin-top: 3.5rem;
+  }
+  .stat-strip .s {
+    padding: 1.75rem 0;
+    border-right: 1px solid var(--rule);
+    text-align: center;
+  }
+  .stat-strip .s:last-child { border-right: none; }
+  .stat-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.8rem;
+    font-weight: 900;
+    color: var(--ink);
+    line-height: 1;
+  }
+  .stat-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    margin-top: 0.4rem;
+  }
+
+  /* PROJECTS */
+  #projects {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 6rem 3.5rem;
+    border-bottom: 1px solid var(--rule);
+  }
+  .projects-header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: 0;
+    border-bottom: 1px solid var(--rule);
+    padding-bottom: 1.5rem;
+  }
+  .projects-count {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+  }
+  .project-item {
+    display: grid;
+    grid-template-columns: 80px 1fr auto;
+    gap: 2.5rem;
+    align-items: start;
+    padding: 3rem 0;
+    border-bottom: 1px solid var(--rule);
+    text-decoration: none;
+    color: inherit;
+    transition: background 0.2s, padding 0.2s, margin 0.2s;
+    position: relative;
+  }
+  .project-item:hover {
+    background: var(--off);
+    margin: 0 -3.5rem;
+    padding-left: 3.5rem;
+    padding-right: 3.5rem;
+  }
+  .project-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 3.5rem;
+    font-weight: 900;
+    color: var(--paper);
+    line-height: 1;
+    padding-top: 0.1em;
+    transition: color 0.2s;
+    letter-spacing: -0.04em;
+  }
+  .project-item:hover .project-num { color: var(--accent-soft); }
+  .project-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 0.5rem;
+  }
+  .project-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--ink);
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    margin-bottom: 0.75rem;
+  }
+  .project-desc {
+    font-family: 'Lora', serif;
+    font-size: 0.95rem;
+    color: var(--ink-dim);
+    line-height: 1.8;
+    max-width: 540px;
+  }
+  .project-aside { text-align: right; padding-top: 0.5rem; flex-shrink: 0; }
+  .project-url {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.1em;
+    color: var(--ink-faint);
+    display: block;
+    margin-bottom: 0.5rem;
+  }
+  .project-arrow {
+    font-size: 1.5rem;
+    color: var(--rule);
+    transition: color 0.2s, transform 0.2s;
+    display: inline-block;
+  }
+  .project-item:hover .project-arrow { color: var(--accent); transform: translate(3px,-3px); }
+
+  .code-inset {
+    background: var(--off);
+    border-left: 3px solid var(--accent);
+    padding: 1.25rem 1.5rem;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    line-height: 1.8;
+    color: var(--ink-mid);
+    margin-top: 1.25rem;
+    border-radius: 0 2px 2px 0;
+  }
+  .kw { color: var(--accent); }
+  .fn { color: #2563eb; }
+  .str { color: #16a34a; }
+  .cm { color: var(--ink-faint); font-style: italic; }
+
+  /* WRITING */
+  #writing {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 6rem 3.5rem;
+    border-bottom: 1px solid var(--rule);
+  }
+  .writing-header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: 3rem;
+    border-bottom: 1px solid var(--rule);
+    padding-bottom: 1.5rem;
+  }
+  .writing-row {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 2rem;
+    align-items: baseline;
+    padding: 1.75rem 0;
+    border-bottom: 1px solid var(--rule);
+    text-decoration: none;
+    color: inherit;
+    transition: padding 0.2s;
+  }
+  .writing-row:hover { padding-left: 1rem; }
+  .writing-row:hover .writing-title { color: var(--accent); }
+  .writing-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.25rem;
+    font-weight: 500;
+    color: var(--ink);
+    transition: color 0.2s;
+    line-height: 1.3;
+  }
+  .writing-meta { display: flex; align-items: center; gap: 1.5rem; flex-shrink: 0; }
+  .writing-source {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+  }
+  .writing-date {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    color: var(--ink-faint);
+  }
+
+  /* CONTACT */
+  #contact {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 6rem 3.5rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6rem;
+    align-items: start;
+    border-top: 1px solid var(--rule);
+  }
+  .contact-desc {
+    font-family: 'Lora', serif;
+    font-size: 1rem;
+    color: var(--ink-dim);
+    line-height: 1.9;
+    font-style: italic;
+    margin-top: 1.5rem;
+  }
+  .link-list { margin-top: 2rem; border-top: 1px solid var(--rule); }
+  .link-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.1rem 0;
+    border-bottom: 1px solid var(--rule);
+    text-decoration: none;
+    transition: padding 0.2s;
+  }
+  .link-row:hover { padding-left: 0.75rem; }
+  .link-row:hover .link-name { color: var(--accent); }
+  .link-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    width: 110px;
+  }
+  .link-name {
+    font-family: 'Lora', serif;
+    font-size: 0.95rem;
+    color: var(--ink-mid);
+    transition: color 0.2s;
+    flex: 1;
+  }
+  .link-arrow {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--rule);
+    transition: color 0.2s;
+  }
+  .link-row:hover .link-arrow { color: var(--accent); }
+
+  /* FOOTER */
+  footer {
+    border-top: 1px solid var(--rule);
+    padding: 2rem 3.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: var(--off);
+  }
+  footer .f-left, footer .f-right {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.1em;
+    color: var(--ink-faint);
+  }
+  footer a { color: var(--accent); text-decoration: none; }
+
+  /* ANIMATIONS */
+  @keyframes rise {
+    from { opacity: 0; transform: translateY(18px); }
+    to   { opacity: 1; transform: none; }
+  }
+  .reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.65s ease, transform 0.65s ease; }
+  .reveal.in { opacity: 1; transform: none; }
+
+  /* RESPONSIVE */
+  @media (max-width: 800px) {
+    nav { padding: 0 1.5rem; }
+    .nav-links { display: none; }
+    #hero { padding: 0 1.5rem 4rem; }
+    #hero::before { font-size: 40vw; right: -0.1em; }
+    .hero-row { flex-direction: column; align-items: flex-start; }
+    .hero-roles { text-align: left; }
+    #about { grid-template-columns: 1fr; gap: 3rem; padding: 4rem 1.5rem; }
+    .stat-strip { grid-template-columns: 1fr 1fr; }
+    .stat-strip .s:nth-child(2) { border-right: none; }
+    .stat-strip .s:nth-child(3) { border-top: 1px solid var(--rule); }
+    .stat-strip .s:nth-child(4) { border-top: 1px solid var(--rule); border-right: none; }
+    #projects, #writing, #contact { padding: 4rem 1.5rem; }
+    .project-item { grid-template-columns: 50px 1fr; }
+    .project-aside { display: none; }
+    .project-item:hover { margin: 0 -1.5rem; padding-left: 1.5rem; padding-right: 1.5rem; }
+    #contact { grid-template-columns: 1fr; gap: 3rem; }
+    .writing-row { grid-template-columns: 1fr; }
+    .writing-meta { display: none; }
+    footer { flex-direction: column; gap: 0.5rem; text-align: center; padding: 1.5rem; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">Muyukani Kizito <span class="slash">/</span> ekizito96</div>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#projects">Work</a></li>
+    <li><a href="#writing">Writing</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-issue">Founder · AI Engineer · Language Designer</div>
+  <h1 class="hero-name">
+    <span class="given">Muyukani</span>
+    <span class="family">Kizito.</span>
+  </h1>
+  <div class="hero-row">
+    <p class="hero-desc">
+      Building the infrastructure layer for autonomous intelligence — from enterprise AI platforms to a systems programming language designed from the ground up for agentic computation.
+    </p>
+    <div class="hero-roles">
+      <div><span>Prescott Data</span> — Founder & Lead AI Eng.</div>
+      <div><span>AI Dojo</span> — Founder & Sensei</div>
+      <div><span>Turn Language</span> — Designer & Author</div>
+      <div><span>GitHub</span> — ekizito96</div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="reveal">
+    <div class="mono" style="color:var(--accent);margin-bottom:1rem;">§ 01 — About</div>
+    <h2 class="section-heading">The work<br>behind the<br><em>work.</em></h2>
+    <div class="stat-strip" style="margin-top:3rem;">
+      <div class="s"><div class="stat-num">3</div><div class="stat-label">Ventures</div></div>
+      <div class="s"><div class="stat-num">1</div><div class="stat-label">Language</div></div>
+      <div class="s"><div class="stat-num">∞</div><div class="stat-label">Problems</div></div>
+      <div class="s"><div class="stat-num">0</div><div class="stat-label">Shortcuts</div></div>
+    </div>
+  </div>
+  <div class="about-body reveal">
+    <p>I'm an AI engineer and founder working at the frontier of autonomous systems. My work spans the full stack — from <strong>enterprise automation platforms</strong> to <strong>programming language design</strong> — unified by one conviction: production AI should be treated as applied physics, not fashion.</p>
+    <p>At <strong>Prescott Data</strong>, I lead as Founder and Lead AI Engineer, building Dromos — a platform that automates complex end-to-end workflows and turns unstructured data into structured insight at enterprise scale.</p>
+    <p>With <strong>AI Dojo</strong>, I publish research papers and run masterclasses on the real physics of AI engineering: attention, token limits, drift, and agent architecture — for engineers who want to understand, not just ship.</p>
+    <p>And with <strong>Turn</strong>, I designed a systems programming language specifically for agentic computation — Erlang-style actors, stochastic inference, and durable memory as first-class bytecode primitives. Built on Rust. No frameworks required.</p>
+  </div>
+</section>
+
+<div style="border-top:1px solid var(--rule);max-width:100%;"></div>
+
+<!-- PROJECTS -->
+<section id="projects">
+  <div class="projects-header reveal">
+    <h2 class="section-heading">Work.</h2>
+    <span class="projects-count">3 ventures</span>
+  </div>
+
+  <a href="https://prescottdata.io" target="_blank" class="project-item reveal">
+    <div class="project-num">01</div>
+    <div class="project-body">
+      <div class="project-tag">Enterprise AI · Founder & Lead AI Engineer</div>
+      <div class="project-title">Prescott Data</div>
+      <p class="project-desc">Enterprise AI workflow automation. Dromos automates end-to-end business processes — handling messy unstructured data across documents, emails, and systems — and surfaces real-time insights. Built for the last mile, for all teams.</p>
+    </div>
+    <div class="project-aside">
+      <span class="project-url">prescottdata.io</span>
+      <span class="project-arrow">↗</span>
+    </div>
+  </a>
+
+  <a href="https://ai-dojo.io" target="_blank" class="project-item reveal">
+    <div class="project-num">02</div>
+    <div class="project-body">
+      <div class="project-tag">Research & Education · Founder & Sensei</div>
+      <div class="project-title">AI Dojo</div>
+      <p class="project-desc">A research and education platform for serious AI engineers. Papers and masterclasses on the physics of production AI — token budgets, attention constraints, agent drift — written for engineers who need to understand, not just use.</p>
+    </div>
+    <div class="project-aside">
+      <span class="project-url">ai-dojo.io</span>
+      <span class="project-arrow">↗</span>
+    </div>
+  </a>
+
+  <a href="https://turn-lang.dev" target="_blank" class="project-item reveal">
+    <div class="project-num">03</div>
+    <div class="project-body">
+      <div class="project-tag">Language Design · Designer & Author</div>
+      <div class="project-title">Turn Language</div>
+      <p class="project-desc">A systems programming language designed from first principles for agentic computation. Erlang-style actors, stochastic inference, and durable memory as first-class bytecode primitives. Built on Rust. No frameworks, no API wrappers.</p>
+      <div class="code-inset">
+<span class="cm">// spawn an inference actor in Turn</span>
+<span class="kw">actor</span> <span class="fn">Analyst</span> {
+  <span class="kw">memory</span> ctx: Context = <span class="fn">recall</span>(<span class="str">"session"</span>);
+  <span class="kw">on</span> msg: Query => {
+    <span class="kw">let</span> result = <span class="fn">infer</span>(ctx, msg.prompt);
+    <span class="fn">send</span>(msg.reply_to, result);
+  }
+}
+      </div>
+    </div>
+    <div class="project-aside">
+      <span class="project-url">turn-lang.dev</span>
+      <span class="project-arrow">↗</span>
+    </div>
+  </a>
+</section>
+
+<!-- WRITING -->
+<section id="writing">
+  <div class="writing-header reveal">
+    <h2 class="section-heading">Writing.</h2>
+    <a href="https://ai-dojo.io" target="_blank" class="mono" style="color:var(--accent);text-decoration:none;">All papers →</a>
+  </div>
+
+  <a href="https://ai-dojo.io/papers/sub-agent-control-patterns" target="_blank" class="writing-row reveal">
+    <div class="writing-title">Sub-Agent Control Patterns: From Autonomy to Cognitive Cohesion</div>
+    <div class="writing-meta">
+      <span class="writing-source">AI Dojo</span>
+      <span class="writing-date">26 Feb 2026</span>
+    </div>
+  </a>
+
+  <a href="https://ai-dojo.io/papers/the-physics-of-ai-engineering" target="_blank" class="writing-row reveal">
+    <div class="writing-title">The Physics of AI Engineering: A Deep Science Masterclass</div>
+    <div class="writing-meta">
+      <span class="writing-source">AI Dojo</span>
+      <span class="writing-date">12 Feb 2026</span>
+    </div>
+  </a>
+
+  <a href="https://ai-dojo.io/blog/nexus-protocol-ai-agent-identity" target="_blank" class="writing-row reveal">
+    <div class="writing-title">The Nexus Protocol — Standardizing AI Agent Identity</div>
+    <div class="writing-meta">
+      <span class="writing-source">Prescott Data</span>
+      <span class="writing-date">2026</span>
+    </div>
+  </a>
+
+  <a href="https://ai-dojo.io" target="_blank" class="writing-row reveal">
+    <div class="writing-title" style="color:var(--accent);font-style:italic;">Browse all papers at AI Dojo →</div>
+    <div class="writing-meta"></div>
+  </a>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="reveal">
+    <div class="mono" style="color:var(--accent);margin-bottom:1rem;">§ 04 — Contact</div>
+    <h2 class="section-heading">Let's build<br>something<br><em>real.</em></h2>
+    <p class="contact-desc">Whether you're looking to discuss enterprise AI, collaborate on research, or explore ideas around autonomous systems and language design — I'm open to the conversation.</p>
+  </div>
+
+  <div class="reveal">
+    <div class="mono" style="color:var(--ink-faint);margin-bottom:0.5rem;">Find me here</div>
+    <div class="link-list">
+      <a href="https://www.linkedin.com/in/muyukani-kizito-860090281/" target="_blank" class="link-row">
+        <span class="link-label">LinkedIn</span>
+        <span class="link-name">Muyukani Kizito</span>
+        <span class="link-arrow">↗</span>
+      </a>
+      <a href="https://prescottdata.io" target="_blank" class="link-row">
+        <span class="link-label">Prescott Data</span>
+        <span class="link-name">prescottdata.io</span>
+        <span class="link-arrow">↗</span>
+      </a>
+      <a href="https://ai-dojo.io" target="_blank" class="link-row">
+        <span class="link-label">AI Dojo</span>
+        <span class="link-name">ai-dojo.io</span>
+        <span class="link-arrow">↗</span>
+      </a>
+      <a href="https://turn-lang.dev" target="_blank" class="link-row">
+        <span class="link-label">Turn Lang</span>
+        <span class="link-name">turn-lang.dev</span>
+        <span class="link-arrow">↗</span>
+      </a>
+      <a href="https://github.com/ekizito96" target="_blank" class="link-row">
+        <span class="link-label">GitHub</span>
+        <span class="link-name">@ekizito96</span>
+        <span class="link-arrow">↗</span>
+      </a>
+      <a href="https://substack.com/@askmuyukani" target="_blank" class="link-row">
+        <span class="link-label">Substack</span>
+        <span class="link-name">@askmuyukani</span>
+        <span class="link-arrow">↗</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="f-left">© 2026 Muyukani Kizito. All rights reserved.</div>
+  <div class="f-right">Hosted on <a href="https://github.com/ekizito96">GitHub Pages</a> · <a href="https://turn-lang.dev">Turn Language</a></div>
+</footer>
+
+<script>
+  const els = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver(entries => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        setTimeout(() => e.target.classList.add('in'), i * 70);
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.08 });
+  els.forEach(el => io.observe(el));
+</script>
+</body>
+</html>
